@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "bin": {
+    "sass-lookup": "bin/cli.js"
+  },
   "scripts": {
     "test": "jscs -p airbnb test index.js bin && mocha"
   },
