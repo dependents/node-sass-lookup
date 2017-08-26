@@ -32,7 +32,7 @@
   "devDependencies": {
     "jscs": "~1.13.1",
     "mocha": "~2.2.5",
-    "mock-fs": "~3.0.0"
+    "mock-fs": "^3.x.x"
   },
   "dependencies": {
     "commander": "~2.8.1",
