@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var mock = require('mock-fs');
 var lookup = require('../');
