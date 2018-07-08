@@ -34,8 +34,8 @@
   "homepage": "https://github.com/mrjoelkemp/node-sass-lookup",
   "devDependencies": {
     "jscs": "~1.13.1",
-    "mocha": "~2.2.5",
-    "mock-fs": "^3.x.x"
+    "mocha": "^5.2.0",
+    "mock-fs": "^4.5.0"
   },
   "dependencies": {
     "commander": "~2.8.1",
