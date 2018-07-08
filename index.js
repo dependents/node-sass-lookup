@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var isRelativePath = require('is-relative-path');
 
 function findDependency(searchDir, depName) {
   var nonPartialPath = path.resolve(searchDir, depName);
@@ -30,7 +29,7 @@ module.exports = function(dep, filename, directory) {
   var ext = path.extname(dep) ? '' : path.extname(filename);
   var sassDep;
 
-  if (isRelativePath(dep)) {
+  if (!path.isAbsolute(dep)) {
     sassDep = path.resolve(filename, dep) + ext;
 
     if (fs.existsSync(sassDep)) { return sassDep; }
