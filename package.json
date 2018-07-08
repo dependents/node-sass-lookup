@@ -3,6 +3,9 @@
   "version": "1.1.0",
   "description": "Get the file associated with a Sass import",
   "main": "index.js",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "directories": {
     "test": "test"
   },
