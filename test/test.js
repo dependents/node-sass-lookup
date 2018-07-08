@@ -1,8 +1,8 @@
 'use strict';
 
-var assert = require('assert');
-var mock = require('mock-fs');
-var lookup = require('../');
+const assert = require('assert');
+const mock = require('mock-fs');
+const lookup = require('../');
 
 describe('sass-lookup', function() {
   beforeEach(function() {
