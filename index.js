@@ -1,6 +1,7 @@
-var path = require('path');
-var fs = require('fs');
-var isRelativePath = require('is-relative-path');
+'use strict';
+
+const path = require('path');
+const fs = require('fs');
 
 function findDependency(searchDir, depName) {
   var nonPartialPath = path.resolve(searchDir, depName);
@@ -24,33 +25,33 @@ function findDependency(searchDir, depName) {
  * @return {String}
  */
 module.exports = function(dep, filename, directory) {
-  var fileDir = path.dirname(filename);
+  const fileDir = path.dirname(filename);
 
   // Use the file's extension if necessary
-  var ext = path.extname(dep) ? '' : path.extname(filename);
-  var sassDep;
+  const ext = path.extname(dep) ? '' : path.extname(filename);
 
-  if (isRelativePath(dep)) {
-    sassDep = path.resolve(filename, dep) + ext;
+  if (!path.isAbsolute(dep)) {
+    const sassDep = path.resolve(filename, dep) + ext;
 
     if (fs.existsSync(sassDep)) { return sassDep; }
   }
 
   // path.basename in case the dep is slashed: a/b/c should be a/b/_c.scss
-  var isSlashed = dep.indexOf('/') !== -1;
-  var depDir = isSlashed ? path.dirname(dep) : '';
-  var depName = (isSlashed ? path.basename(dep) : dep) + ext;
+  const isSlashed = dep.indexOf('/') !== -1;
+  const depDir = isSlashed ? path.dirname(dep) : '';
+  const depName = (isSlashed ? path.basename(dep) : dep) + ext;
 
-  var relativeToFile = findDependency(path.resolve(fileDir, depDir), depName);
+  const relativeToFile = findDependency(path.resolve(fileDir, depDir), depName);
   if (relativeToFile) {
     return relativeToFile;
   }
 
-  var directories = typeof directory === 'string' ? [directory] : directory;
+  const directories = typeof directory === 'string' ? [directory] : directory;
 
+  let i;
   for (i in directories) {
-    var dir = directories[i];
-    var relativeToDir = findDependency(path.resolve(dir, depDir), depName);
+    const dir = directories[i];
+    const relativeToDir = findDependency(path.resolve(dir, depDir), depName);
     if (relativeToDir) {
       return relativeToDir;
     }

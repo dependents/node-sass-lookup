@@ -2,8 +2,8 @@
 
 'use strict';
 
-var lookup = require('../');
-var program = require('commander');
+const lookup = require('../');
+const program = require('commander');
 
 program
   .version(require('../package.json').version)
@@ -12,8 +12,8 @@ program
   .option('-d, --directory [path]', 'location of all sass files')
   .parse(process.argv);
 
-var filename = program.filename;
-var directory = program.directory;
-var dep = program.args[0];
+const filename = program.filename;
+const directory = program.directory;
+const dep = program.args[0];
 
 console.log(lookup(dep, filename, directory));
