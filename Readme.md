@@ -12,9 +12,15 @@ partials with the `.scss` in the name, all of it.
 
 ### Usage
 
-`sassLookup(dependencyName, filename, directory)`
+```js
+sassLookup({
+  dependency: 'foo',
+  filename: 'path/to/filename',
+  directory: 'path/to/directory'
+})
+```
 
-* `dependencyName`: The partial's name
+* `dependency`: The partial's name
   * If your sass file had `@import "foo";`, then `"foo"` would be the dependency name
 * `filename`: The file importing the dependency
 * `directory`: The location(s) of all sass files
@@ -25,7 +31,11 @@ Example:
 ```js
 var sassLookup = require('sass-lookup');
 
-sassLookup('variables', 'app/styles/styles.scss', 'app/styles'); // yields app/styles/variables.scss
+sassLookup({
+  dependency: 'variables',
+  filename: 'app/styles/styles.scss',
+  directory: 'app/styles'
+}); // yields app/styles/variables.scss
 ```
 
 * This assumes that the file `app/styles/styles.scss' has `@import "variables";`
