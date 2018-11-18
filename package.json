@@ -4,7 +4,7 @@
   "description": "Get the file associated with a Sass import",
   "main": "index.js",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "directories": {
     "test": "test"
@@ -13,7 +13,7 @@
     "sass-lookup": "bin/cli.js"
   },
   "scripts": {
-    "test": "jscs -p airbnb test index.js bin && mocha"
+    "test": "jscs test/test.js index.js bin && ./node_modules/.bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +33,8 @@
   },
   "homepage": "https://github.com/mrjoelkemp/node-sass-lookup",
   "devDependencies": {
-    "jscs": "~1.13.1",
+    "jscs": "^3.0.7",
+    "jscs-preset-mrjoelkemp": "^2.0.0",
     "mocha": "^5.2.0",
     "mock-fs": "^4.5.0"
   },

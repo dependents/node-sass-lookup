@@ -19,12 +19,25 @@ function findDependency(searchDir, depName) {
  * Determines the resolved dependency path according to
  * the Sass compiler's dependency lookup behavior
  *
- * @param  {String} dep - the import name
- * @param  {String} filename - the file containing the import
- * @param  {String} directory - the location of all sass files
+ * @param {Object} options
+ * @param  {String} options.dep - the import name
+ * @param  {String} options.filename - the file containing the import
+ * @param  {String|Array<String>} options.directory - the location(s) of all sass files
  * @return {String}
  */
-module.exports = function(dep, filename, directory) {
+module.exports = function({dependency: dep, filename, directory} = {}) {
+  if (typeof dep === 'undefined') {
+    throw new Error('dependency is not supplied');
+  }
+
+  if (typeof filename === 'undefined') {
+    throw new Error('filename is not supplied');
+  }
+
+  if (typeof directory === 'undefined') {
+    throw new Error('directory is not supplied');
+  }
+
   const fileDir = path.dirname(filename);
 
   // Use the file's extension if necessary
