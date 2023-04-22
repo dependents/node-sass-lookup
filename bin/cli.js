@@ -2,18 +2,18 @@
 
 'use strict';
 
-const lookup = require('../');
 const program = require('commander');
+const lookup = require('../index.js');
+const { version } = require('../package.json');
 
 program
-  .version(require('../package.json').version)
+  .version(version)
   .usage('[options] <path>')
   .option('-f, --filename [path]', 'file containing the dependency')
   .option('-d, --directory [path]', 'location of all sass files')
-  .parse(process.argv);
+  .parse();
 
-const filename = program.filename;
-const directory = program.directory;
-const dep = program.args[0];
+const dependency = program.args[0];
+const { filename, directory } = program.opts();
 
-console.log(lookup(dep, filename, directory));
+console.log(lookup(dependency, filename, directory));
