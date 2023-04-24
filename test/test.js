@@ -32,7 +32,7 @@ testSuite.before.each(() => {
   });
 });
 
-testSuite.before.each(() => mock.restore);
+testSuite.after.each(() => mock.restore);
 
 testSuite('throws if dependency is not supplied', () => {
   assert.throws(() => lookup({
