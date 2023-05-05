@@ -1,19 +1,7 @@
 'use strict';
 
-const path = require('path');
 const fs = require('fs');
-
-function findDependency(searchDir, depName) {
-  const nonPartialPath = path.resolve(searchDir, depName);
-  if (fs.existsSync(nonPartialPath)) {
-    return nonPartialPath;
-  }
-
-  const partialsPath = path.resolve(searchDir, `_${depName}`);
-  if (fs.existsSync(partialsPath)) {
-    return partialsPath;
-  }
-}
+const path = require('path');
 
 /**
  * Determines the resolved dependency path according to
@@ -41,7 +29,7 @@ module.exports = function({ dependency: dep, filename, directory } = {}) {
     }
   }
 
-  // path.basename in case the dep is slashed: a/b/c should be a/b/_c.scss
+  // `path.basename` in case the dep is slashed: a/b/c should be a/b/_c.scss
   const isSlashed = dep.includes('/');
   const depDir = isSlashed ? path.dirname(dep) : '';
   const depName = (isSlashed ? path.basename(dep) : dep) + ext;
@@ -53,7 +41,7 @@ module.exports = function({ dependency: dep, filename, directory } = {}) {
     return relativeToFile;
   }
 
-  const directories = typeof directory === 'string' ? [directory] : directory;
+  const directories = Array.isArray(directory) ? directory : [directory];
 
   for (const dir of Object.values(directories)) {
     const searchDir = path.resolve(dir, depDir);
@@ -63,9 +51,21 @@ module.exports = function({ dependency: dep, filename, directory } = {}) {
     }
   }
 
-  // old versions returned a static path, if one could not be found
-  // do the same, if `directory` is not an array
+  // Old versions returned a static path, if one could not be found.
+  // Do the same, if `directory` is not an array
   if (typeof directory === 'string') {
     return path.resolve(directory, depDir, depName);
   }
 };
+
+function findDependency(searchDir, depName) {
+  const nonPartialPath = path.resolve(searchDir, depName);
+  if (fs.existsSync(nonPartialPath)) {
+    return nonPartialPath;
+  }
+
+  const partialsPath = path.resolve(searchDir, `_${depName}`);
+  if (fs.existsSync(partialsPath)) {
+    return partialsPath;
+  }
+}
