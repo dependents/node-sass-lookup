@@ -38,21 +38,21 @@ testSuite('throws if dependency is not supplied', () => {
   assert.throws(() => lookup({
     filename: 'example/baz.scss',
     directory: 'example'
-  }), Error, 'dependency is not a supplied');
+  }), err => err instanceof Error && err.message === 'dependency is not supplied');
 });
 
 testSuite('throws if filename is not supplied', () => {
   assert.throws(() => lookup({
     dependency: '_foo',
     directory: 'example'
-  }), Error, 'filename is not a supplied');
+  }), err => err instanceof Error && err.message === 'filename is not supplied');
 });
 
 testSuite('throws if directory is not supplied', () => {
   assert.throws(() => lookup({
     dependency: '_foo',
     filename: 'example/baz.scss'
-  }), Error, 'directory is not a supplied');
+  }), err => err instanceof Error && err.message === 'directory is not supplied');
 });
 
 testSuite('handles partials with underscored files', () => {
