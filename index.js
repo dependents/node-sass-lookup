@@ -8,35 +8,36 @@ const path = require('path');
  * the Sass compiler's dependency lookup behavior
  *
  * @param  {Object} options
- * @param  {String} options.dep - the import name
+ * @param  {String} options.dependency - the import name
  * @param  {String} options.filename - the file containing the import
  * @param  {String|Array<String>} options.directory - the location(s) of all sass files
  * @return {String}
  */
-module.exports = function({ dependency: dep, filename, directory } = {}) {
-  if (dep === undefined) throw new Error('dependency is not supplied');
+module.exports = function({ dependency, filename, directory } = {}) {
+  if (dependency === undefined) throw new Error('dependency is not supplied');
   if (filename === undefined) throw new Error('filename is not supplied');
   if (directory === undefined) throw new Error('directory is not supplied');
 
   // Use the file's extension if necessary
-  const ext = path.extname(dep) ? '' : path.extname(filename);
+  const ext = path.extname(dependency) ? '' : path.extname(filename);
 
-  if (!path.isAbsolute(dep)) {
-    const sassDep = path.resolve(filename, dep) + ext;
+  if (!path.isAbsolute(dependency)) {
+    const sassDep = path.resolve(filename, dependency) + ext;
 
     if (fs.existsSync(sassDep)) {
       return sassDep;
     }
   }
 
-  // `path.basename` in case the dep is slashed: a/b/c should be a/b/_c.scss
-  const isSlashed = dep.includes('/');
-  const depDir = isSlashed ? path.dirname(dep) : '';
-  const depName = (isSlashed ? path.basename(dep) : dep) + ext;
+  // `path.basename` in case the dependency is slashed: a/b/c should be a/b/_c.scss
+  const isSlashed = dependency.includes('/');
+  const depDir = isSlashed ? path.dirname(dependency) : '';
+  const depName = (isSlashed ? path.basename(dependency) : dependency) + ext;
   const fileDir = path.dirname(filename);
   const searchDir = path.resolve(fileDir, depDir);
 
   const relativeToFile = findDependency(searchDir, depName);
+
   if (relativeToFile) {
     return relativeToFile;
   }
@@ -46,6 +47,7 @@ module.exports = function({ dependency: dep, filename, directory } = {}) {
   for (const dir of Object.values(directories)) {
     const searchDir = path.resolve(dir, depDir);
     const relativeToDir = findDependency(searchDir, depName);
+
     if (relativeToDir) {
       return relativeToDir;
     }
