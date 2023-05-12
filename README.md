@@ -8,15 +8,15 @@
 
 This module replaces the Sass compiler's lookup algorithm for resolving a partial's path.
 
-* Handles underscored/non-underscored partials,
-partials with filenames, partials within subdirectories,
-partials with the `.scss` in the name, all of it.
+* Handles underscored/non-underscored partials, partials with filenames, partials within subdirectories, partials with the `.scss` in the name, all of it.
 
-*Originally built for [Dependents](https://github.com/dependents/Dependents#dependents)*
+*Originally built for [Dependents](https://github.com/dependents/Dependents)*
 
 ## Usage
 
 ```js
+const sassLookup = require('sass-lookup');
+
 sassLookup({
   dependency: 'foo',
   filename: 'path/to/filename',
@@ -42,13 +42,12 @@ sassLookup({
 }); // yields app/styles/variables.scss
 ```
 
-* This assumes that the file `app/styles/styles.scss` has `@import "variables";`
-and that all of the other sass files are located within `app/styles`.
+* This assumes that the file `app/styles/styles.scss` has `@import "variables";` and that all of the other sass files are located within `app/styles`.
 * Would yield `app/styles/_variables.scss` if the partial had an underscored filename.
 
 ## CLI
 
-*Assumes a global install sass-lookup with `npm install -g sass-lookup`*
+Assumes a global install of sass-lookup with `npm install -g sass-lookup`
 
 ```sh
 sass-lookup [options] path/to/file
