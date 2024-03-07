@@ -38,7 +38,8 @@
     "node": ">=14"
   },
   "dependencies": {
-    "commander": "^10.0.1"
+    "commander": "^10.0.1",
+    "enhanced-resolve": "^5.14.1"
   },
   "devDependencies": {
     "c8": "^7.13.0",
