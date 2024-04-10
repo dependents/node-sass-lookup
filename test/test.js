@@ -56,7 +56,7 @@ testSuite('throws if directory is not supplied', () => {
 });
 
 testSuite('handles partials with underscored files', () => {
-  const expected = path.normalize(`${process.cwd()}/example/_foo.scss`);
+  const expected = path.join(process.cwd(), '/example/_foo.scss');
   const actual = lookup({
     dependency: '_foo',
     filename: 'example/baz.scss',
@@ -67,7 +67,7 @@ testSuite('handles partials with underscored files', () => {
 });
 
 testSuite('handles partials with an extension', () => {
-  const expected = path.normalize(`${process.cwd()}/example/baz.scss`);
+  const expected = path.join(process.cwd(), '/example/baz.scss');
   const actual = lookup({
     dependency: 'baz.scss',
     filename: 'example/styles.scss',
@@ -78,7 +78,7 @@ testSuite('handles partials with an extension', () => {
 });
 
 testSuite('deeply nested paths: handles underscored partials', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/_b3.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/_b3.scss');
   const actual = lookup({
     dependency: 'a/b/b3',
     filename: 'example/nested/styles.scss',
@@ -89,7 +89,7 @@ testSuite('deeply nested paths: handles underscored partials', () => {
 });
 
 testSuite('deeply nested paths: handles non-underscored partials', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b2.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b2.scss');
   const actual = lookup({
     dependency: 'a/b/b2',
     filename: 'example/nested/styles.scss',
@@ -100,7 +100,7 @@ testSuite('deeply nested paths: handles non-underscored partials', () => {
 });
 
 testSuite('relative partials: handles one level up', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/a.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/a.scss');
   const actual = lookup({
     dependency: '../a',
     filename: 'example/nested/a/b/b.scss',
@@ -111,7 +111,7 @@ testSuite('relative partials: handles one level up', () => {
 });
 
 testSuite('relative partials: handles more than one level up', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/styles.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/styles.scss');
   const actual = lookup({
     dependency: '../../styles',
     filename: 'example/nested/a/b/b.scss',
@@ -122,7 +122,7 @@ testSuite('relative partials: handles more than one level up', () => {
 });
 
 testSuite('partials within the same subdirectory: handles non-underscored partials', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b.scss');
   const actual = lookup({
     dependency: 'b',
     filename: 'example/nested/a/b/b2.scss',
@@ -133,7 +133,7 @@ testSuite('partials within the same subdirectory: handles non-underscored partia
 });
 
 testSuite('partials within the same subdirectory: handles underscored partials', () => {
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/_b3.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/_b3.scss');
   const actual = lookup({
     dependency: 'b3',
     filename: 'example/nested/a/b/b2.scss',
@@ -145,7 +145,7 @@ testSuite('partials within the same subdirectory: handles underscored partials',
 
 testSuite('multiple directories: handles partials in middle directory', () => {
   const directories = ['example', 'example/nested/a/b', 'example/a'];
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b.scss');
   const actual = lookup({
     dependency: 'b',
     filename: 'b2.scss',
@@ -157,7 +157,7 @@ testSuite('multiple directories: handles partials in middle directory', () => {
 
 testSuite('multiple directories: partial in last directory of list', () => {
   const directories = ['example', 'example/nested/a/b'];
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b.scss');
   const actual = lookup({
     dependency: 'b',
     filename: 'b2.scss',
@@ -169,7 +169,7 @@ testSuite('multiple directories: partial in last directory of list', () => {
 
 testSuite('multiple directories: non-partial in last directory when given list', () => {
   const directories = ['example', 'example/nested/a/b'];
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b2.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b2.scss');
   const actual = lookup({
     dependency: 'b2',
     filename: 'b3.scss',
@@ -181,7 +181,7 @@ testSuite('multiple directories: non-partial in last directory when given list',
 
 testSuite('multiple directories: handles underscored partials', () => {
   const directories = ['example', 'example/nested/a/b'];
-  const expected = path.normalize(`${process.cwd()}/example/nested/a/b/b2.scss`);
+  const expected = path.join(process.cwd(), '/example/nested/a/b/b2.scss');
   const actual = lookup({
     dependency: 'b2',
     filename: 'b3.scss',
