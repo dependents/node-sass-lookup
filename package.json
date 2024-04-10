@@ -1,6 +1,6 @@
 {
   "name": "sass-lookup",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "description": "Get the file associated with a Sass import",
   "main": "index.js",
   "files": [
