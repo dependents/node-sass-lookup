@@ -2,11 +2,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { debuglog } = require('util');
 const process = require('process');
+const { debuglog } = require('util');
 const webpackResolve = require('enhanced-resolve');
 
-const debug = debuglog('saas-lookup');
+const debug = debuglog('sass-lookup');
 
 /**
  * Determines the resolved dependency path according to
