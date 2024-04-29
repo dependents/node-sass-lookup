@@ -32,14 +32,14 @@ module.exports = function({
   if (dependency.startsWith(WEBPACK_ALIAS_FLAG) && Boolean(webpackConfig)) {
     dependency = dependency.replace(WEBPACK_ALIAS_FLAG, '');
     let loadedConfig;
+
     try {
       webpackConfig = path.resolve(webpackConfig);
       loadedConfig = require(webpackConfig);
+
       if (typeof loadedConfig === 'function') {
         loadedConfig = loadedConfig();
-      }
-
-      if (Array.isArray(loadedConfig)) {
+      } else if (Array.isArray(loadedConfig)) {
         loadedConfig = loadedConfig[0];
       }
     } catch (error) {
