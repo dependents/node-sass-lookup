@@ -192,7 +192,7 @@ testSuite('multiple directories: handles underscored partials', () => {
 });
 
 testSuite('handle paths with ~, test for the webpack alias', () => {
-  // enhanced-resolve need a real file system to work
+  // enhanced-resolve needs a real file system to work
   mock.restore();
   const expected = path.join(process.cwd(), '/test/fixtures/foo.scss');
   const actual = lookup({
