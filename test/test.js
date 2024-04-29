@@ -199,7 +199,7 @@ testSuite('handle paths with ~, test for the webpack alias', () => {
     dependency: '~@/foo.scss',
     filename: './fixtures/tilde.scss',
     directory: 'fixtures',
-    webpackConfig: path.resolve(__dirname, './fixtures/webpack.config.js')
+    webpackConfig: path.join(__dirname, './fixtures/webpack.config.js')
   });
 
   assert.is(actual, expected);
