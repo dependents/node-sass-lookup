@@ -2,6 +2,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
+const { debuglog } = require('util');
+const webpackResolve = require('enhanced-resolve');
+
+const debug = debuglog('sass-lookup');
 
 /**
  * Determines the resolved dependency path according to
@@ -13,10 +18,49 @@ const path = require('path');
  * @param  {String|Array<String>} options.directory - the location(s) of all sass files
  * @return {String}
  */
-module.exports = function({ dependency, filename, directory } = {}) {
+module.exports = function({
+  dependency,
+  filename,
+  directory,
+  webpackConfig
+} = {}) {
   if (dependency === undefined) throw new Error('dependency is not supplied');
   if (filename === undefined) throw new Error('filename is not supplied');
   if (directory === undefined) throw new Error('directory is not supplied');
+
+  const WEBPACK_ALIAS_FLAG = '~';
+  if (dependency.startsWith(WEBPACK_ALIAS_FLAG) && Boolean(webpackConfig)) {
+    dependency = dependency.replace(WEBPACK_ALIAS_FLAG, '');
+    let loadedConfig;
+
+    try {
+      webpackConfig = path.resolve(webpackConfig);
+      loadedConfig = require(webpackConfig);
+
+      if (typeof loadedConfig === 'function') {
+        loadedConfig = loadedConfig();
+      } else if (Array.isArray(loadedConfig)) {
+        loadedConfig = loadedConfig[0];
+      }
+    } catch (error) {
+      debug(`error loading the webpack config at ${webpackConfig}`);
+      debug(error.message);
+      debug(error.stack);
+      return '';
+    }
+
+    try {
+      const resolveConfig = { ...loadedConfig.resolve };
+      const resolver = webpackResolve.create.sync(resolveConfig);
+      const modulePath = resolver(process.cwd(), dependency);
+      return modulePath;
+    } catch (error) {
+      debug(`error resolving the webpack alias ${dependency}`);
+      debug(error.message);
+      debug(error.stack);
+      return '';
+    }
+  }
 
   // Use the file's extension if necessary
   const ext = path.extname(dependency) ? '' : path.extname(filename);
