@@ -1,11 +1,12 @@
-'use strict';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+import mock from 'mock-fs';
+import { suite } from 'uvu';
+import * as assert from 'uvu/assert';
+import lookup from '../index.js';
 
-const path = require('path');
-const process = require('process');
-const mock = require('mock-fs');
-const { suite } = require('uvu');
-const assert = require('uvu/assert');
-const lookup = require('../index.js');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const testSuite = suite('sass-lookup');
 

@@ -1,10 +1,11 @@
-'use strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { createRequire } from 'node:module';
+import { debuglog } from 'node:util';
+import webpackResolve from 'enhanced-resolve';
 
-const fs = require('fs');
-const path = require('path');
-const process = require('process');
-const { debuglog } = require('util');
-const webpackResolve = require('enhanced-resolve');
+const require = createRequire(import.meta.url);
 
 const debug = debuglog('sass-lookup');
 
@@ -18,12 +19,7 @@ const debug = debuglog('sass-lookup');
  * @param  {String|Array<String>} options.directory - the location(s) of all sass files
  * @return {String}
  */
-module.exports = function({
-  dependency,
-  filename,
-  directory,
-  webpackConfig
-} = {}) {
+export default function lookup({ dependency, filename, directory, webpackConfig } = {}) {
   if (dependency === undefined) throw new Error('dependency is not supplied');
   if (filename === undefined) throw new Error('filename is not supplied');
   if (directory === undefined) throw new Error('directory is not supplied');
@@ -37,12 +33,17 @@ module.exports = function({
       webpackConfig = path.resolve(webpackConfig);
       loadedConfig = require(webpackConfig);
 
+      // Node's require(esm) returns a namespace object. Unwrap default when present.
+      if (loadedConfig && typeof loadedConfig === 'object' && 'default' in loadedConfig) {
+        loadedConfig = loadedConfig.default;
+      }
+
       if (typeof loadedConfig === 'function') {
         loadedConfig = loadedConfig();
       } else if (Array.isArray(loadedConfig)) {
         loadedConfig = loadedConfig[0];
       }
-    } catch (error) {
+    } catch(error) {
       debug(`error loading the webpack config at ${webpackConfig}`);
       debug(error.message);
       debug(error.stack);
@@ -54,7 +55,7 @@ module.exports = function({
       const resolver = webpackResolve.create.sync(resolveConfig);
       const modulePath = resolver(process.cwd(), dependency);
       return modulePath;
-    } catch (error) {
+    } catch(error) {
       debug(`error resolving the webpack alias ${dependency}`);
       debug(error.message);
       debug(error.stack);
@@ -102,7 +103,7 @@ module.exports = function({
   if (typeof directory === 'string') {
     return path.resolve(directory, depDir, depName);
   }
-};
+}
 
 function findDependency(searchDir, depName) {
   const nonPartialPath = path.resolve(searchDir, depName);
@@ -115,3 +116,5 @@ function findDependency(searchDir, depName) {
     return partialsPath;
   }
 }
+
+export { lookup as 'module.exports' };

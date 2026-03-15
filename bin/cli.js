@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-'use strict';
+import { createRequire } from 'node:module';
+import { program } from 'commander';
+import lookup from '../index.js';
 
-const { program } = require('commander');
-const lookup = require('../index.js');
-const { name, description, version } = require('../package.json');
+const { name, description, version } = createRequire(import.meta.url)('../package.json');
 
 program
   .name(name)
