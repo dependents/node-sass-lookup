@@ -20,4 +20,4 @@ program
 const dependency = program.args[0];
 const { filename, directory } = program.opts();
 
-console.log(lookup(dependency, filename, directory));
+console.log(lookup({ dependency, filename, directory }));
