@@ -79,6 +79,17 @@ testSuite('handles partials with an extension', () => {
   assert.is(actual, expected);
 });
 
+testSuite('returns direct relative path when the resolved file exists', () => {
+  const expected = path.join(process.cwd(), '/example/_foo.scss');
+  const actual = lookup({
+    dependency: '../_foo',
+    filename: 'example/styles.scss',
+    directory: 'example'
+  });
+
+  assert.is(actual, expected);
+});
+
 testSuite('deeply nested paths: handles underscored partials', () => {
   const expected = path.join(process.cwd(), '/example/nested/a/b/_b3.scss');
   const actual = lookup({
@@ -193,6 +204,17 @@ testSuite('multiple directories: handles underscored partials', () => {
   assert.is(actual, expected);
 });
 
+testSuite('returns a static fallback when not found and directory is a string', () => {
+  const expected = path.join(process.cwd(), '/example/does-not-exist.scss');
+  const actual = lookup({
+    dependency: 'does-not-exist',
+    filename: 'example/styles.scss',
+    directory: 'example'
+  });
+
+  assert.is(actual, expected);
+});
+
 testSuite('handle paths with ~, test for the webpack alias', () => {
   // enhanced-resolve needs a real file system to work
   mock.restore();
@@ -202,6 +224,58 @@ testSuite('handle paths with ~, test for the webpack alias', () => {
     filename: './fixtures/tilde.scss',
     directory: 'fixtures',
     webpackConfig: path.join(__dirname, './fixtures/webpack.config.js')
+  });
+
+  assert.is(actual, expected);
+});
+
+testSuite('webpack alias returns empty string when webpack config cannot load', () => {
+  const actual = lookup({
+    dependency: '~@/foo.scss',
+    filename: './fixtures/tilde.scss',
+    directory: 'fixtures',
+    webpackConfig: path.join(__dirname, './fixtures/missing.config.js')
+  });
+
+  assert.is(actual, '');
+});
+
+testSuite('webpack alias returns empty string when dependency cannot be resolved', () => {
+  // enhanced-resolve needs a real file system to work
+  mock.restore();
+  const actual = lookup({
+    dependency: '~@/missing.scss',
+    filename: './fixtures/tilde.scss',
+    directory: 'fixtures',
+    webpackConfig: path.join(__dirname, './fixtures/webpack.config.js')
+  });
+
+  assert.is(actual, '');
+});
+
+testSuite('webpack config can be a function', () => {
+  // enhanced-resolve needs a real file system to work
+  mock.restore();
+  const expected = path.join(process.cwd(), '/test/fixtures/foo.scss');
+  const actual = lookup({
+    dependency: '~@/foo.scss',
+    filename: './fixtures/tilde.scss',
+    directory: 'fixtures',
+    webpackConfig: path.join(__dirname, './fixtures/webpack.config.function.js')
+  });
+
+  assert.is(actual, expected);
+});
+
+testSuite('webpack config can be an array', () => {
+  // enhanced-resolve needs a real file system to work
+  mock.restore();
+  const expected = path.join(process.cwd(), '/test/fixtures/foo.scss');
+  const actual = lookup({
+    dependency: '~@/foo.scss',
+    filename: './fixtures/tilde.scss',
+    directory: 'fixtures',
+    webpackConfig: path.join(__dirname, './fixtures/webpack.config.array.js')
   });
 
   assert.is(actual, expected);
