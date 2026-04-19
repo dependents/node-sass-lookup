@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
-const process = require('process');
+const path = require('node:path');
+const process = require('node:process');
 const mock = require('mock-fs');
 const { suite } = require('uvu');
 const assert = require('uvu/assert');
