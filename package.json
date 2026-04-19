@@ -2,10 +2,15 @@
   "name": "sass-lookup",
   "version": "6.1.1",
   "description": "Get the file associated with a Sass import",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    "import": "./index.js",
+    "require": "./index.cjs"
+  },
   "files": [
     "bin/cli.js",
-    "index.js"
+    "index.{cjs,js}"
   ],
   "bin": {
     "sass-lookup": "bin/cli.js"

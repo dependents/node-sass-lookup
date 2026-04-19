@@ -1,10 +1,11 @@
-'use strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { createRequire } from 'node:module';
+import { debuglog } from 'node:util';
+import webpackResolve from 'enhanced-resolve';
 
-const fs = require('node:fs');
-const path = require('node:path');
-const process = require('node:process');
-const { debuglog } = require('node:util');
-const webpackResolve = require('enhanced-resolve');
+const require = createRequire(import.meta.url);
 
 const debug = debuglog('sass-lookup');
 
@@ -18,7 +19,7 @@ const debug = debuglog('sass-lookup');
  * @param  {String|Array<String>} options.directory - the location(s) of all sass files
  * @return {String}
  */
-module.exports = function({ dependency, filename, directory, webpackConfig } = {}) {
+export default function lookup({ dependency, filename, directory, webpackConfig } = {}) {
   if (dependency === undefined) throw new Error('dependency is not supplied');
   if (filename === undefined) throw new Error('filename is not supplied');
   if (directory === undefined) throw new Error('directory is not supplied');
@@ -69,7 +70,7 @@ module.exports = function({ dependency, filename, directory, webpackConfig } = {
   if (typeof directory === 'string') {
     return path.resolve(directory, depDir, depName);
   }
-};
+}
 
 function resolveWebpackAliasDependency(dependency, webpackConfig) {
   let loadedConfig;
@@ -98,6 +99,11 @@ function resolveWebpackAliasDependency(dependency, webpackConfig) {
 
 function loadWebpackConfig(webpackConfigPath) {
   let loadedConfig = require(webpackConfigPath);
+
+  // Node's require(esm) returns a namespace object. Unwrap default when present.
+  if (loadedConfig && typeof loadedConfig === 'object' && 'default' in loadedConfig) {
+    loadedConfig = loadedConfig.default;
+  }
 
   if (typeof loadedConfig === 'function') {
     loadedConfig = loadedConfig();
