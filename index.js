@@ -55,7 +55,7 @@ module.exports = function({ dependency, filename, directory, webpackConfig } = {
 
   const directories = Array.isArray(directory) ? directory : [directory];
 
-  for (const dir of Object.values(directories)) {
+  for (const dir of directories) {
     const searchDir = path.resolve(dir, depDir);
     const relativeToDir = findDependency(searchDir, depName);
 
