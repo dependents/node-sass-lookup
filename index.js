@@ -79,9 +79,7 @@ function resolveWebpackAliasDependency(dependency, webpackConfig) {
   try {
     loadedConfig = loadWebpackConfig(resolvedConfigPath);
   } catch(error) {
-    debug(`error loading the webpack config at ${resolvedConfigPath}`);
-    debug(error.message);
-    debug(error.stack);
+    debug(`error loading the webpack config at ${resolvedConfigPath}\n${error.stack}`);
     return '';
   }
 
@@ -90,9 +88,7 @@ function resolveWebpackAliasDependency(dependency, webpackConfig) {
     const resolver = webpackResolve.create.sync(resolveConfig);
     return resolver(process.cwd(), dependency);
   } catch(error) {
-    debug(`error resolving the webpack alias ${dependency}`);
-    debug(error.message);
-    debug(error.stack);
+    debug(`error resolving the webpack alias ${dependency}\n${error.stack}`);
     return '';
   }
 }
