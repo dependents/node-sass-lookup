@@ -14,14 +14,28 @@ This module replaces the Sass compiler's lookup algorithm for resolving a partia
 
 ## Usage
 
+### ESM
+
 ```js
-const sassLookup = require('sass-lookup');
+import sassLookup from 'sass-lookup';
 
 sassLookup({
   dependency: 'foo',
   filename: 'path/to/filename',
   directory: 'path/to/directory'
 })
+```
+
+### CommonJS
+
+```js
+const { default: sassLookup } = require('sass-lookup');
+
+sassLookup({
+  dependency: 'foo',
+  filename: 'path/to/filename',
+  directory: 'path/to/directory'
+});
 ```
 
 * `dependency`: The partial's name
@@ -33,7 +47,7 @@ sassLookup({
 Example:
 
 ```js
-const sassLookup = require('sass-lookup');
+import sassLookup from 'sass-lookup';
 
 sassLookup({
   dependency: 'variables',

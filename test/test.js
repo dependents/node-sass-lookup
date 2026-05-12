@@ -1,11 +1,12 @@
-'use strict';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+import mock from 'mock-fs';
+import { suite } from 'uvu';
+import * as assert from 'uvu/assert';
+import lookup from '../index.js';
 
-const path = require('node:path');
-const process = require('node:process');
-const mock = require('mock-fs');
-const { suite } = require('uvu');
-const assert = require('uvu/assert');
-const lookup = require('../index.js');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const testSuite = suite('sass-lookup');
 
@@ -276,6 +277,20 @@ testSuite('webpack config can be an array', () => {
     filename: './fixtures/tilde.scss',
     directory: 'fixtures',
     webpackConfig: path.join(__dirname, './fixtures/webpack.config.array.js')
+  });
+
+  assert.is(actual, expected);
+});
+
+testSuite('webpack config can be an esm default export', () => {
+  // enhanced-resolve needs a real file system to work
+  mock.restore();
+  const expected = path.join(process.cwd(), '/test/fixtures/foo.scss');
+  const actual = lookup({
+    dependency: '~@/foo.scss',
+    filename: './fixtures/tilde.scss',
+    directory: 'fixtures',
+    webpackConfig: path.join(__dirname, './fixtures/webpack.config.esm.mjs')
   });
 
   assert.is(actual, expected);
