@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const process = require('process');
 const { debuglog } = require('util');
-const webpackResolve = require('enhanced-resolve');
+const enhancedResolve = require('enhanced-resolve');
 
 const debug = debuglog('sass-lookup');
 
@@ -84,7 +84,7 @@ function resolveWebpackAliasDependency(dependency, webpackConfig) {
 
   try {
     const resolveConfig = { ...loadedConfig.resolve };
-    const resolver = webpackResolve.create.sync(resolveConfig);
+    const resolver = enhancedResolve.create.sync(resolveConfig);
     return resolver(process.cwd(), dependency);
   } catch (error) {
     debug(`error resolving the webpack alias ${dependency}\n${error.stack}`);
