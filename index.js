@@ -31,25 +31,23 @@ export default function lookup({ dependency, filename, directory, webpackConfig 
   }
 
   // Use the file's extension if necessary
-  const ext = path.extname(dependency) ? '' : path.extname(filename);
+  const extension = path.extname(dependency) ? '' : path.extname(filename);
 
   if (!path.isAbsolute(dependency)) {
-    const sassDep = path.resolve(filename, dependency) + ext;
-
-    if (fs.existsSync(sassDep)) {
-      return sassDep;
+    const sassDependency = path.resolve(filename, dependency) + extension;
+    if (fs.existsSync(sassDependency)) {
+      return sassDependency;
     }
   }
 
   // `path.basename` in case the dependency is slashed: a/b/c should be a/b/_c.scss
   const isSlashed = dependency.includes('/');
-  const depDir = isSlashed ? path.dirname(dependency) : '';
-  const depName = (isSlashed ? path.basename(dependency) : dependency) + ext;
-  const fileDir = path.dirname(filename);
-  const searchDir = path.resolve(fileDir, depDir);
+  const deependencyDir = isSlashed ? path.dirname(dependency) : '';
+  const dependencyName = (isSlashed ? path.basename(dependency) : dependency) + extension;
+  const fileDirectory = path.dirname(filename);
+  const searchDirectory = path.resolve(fileDirectory, deependencyDir);
 
-  const relativeToFile = findDependency(searchDir, depName);
-
+  const relativeToFile = findDependency(searchDirectory, dependencyName);
   if (relativeToFile) {
     return relativeToFile;
   }
@@ -57,9 +55,8 @@ export default function lookup({ dependency, filename, directory, webpackConfig 
   const directories = Array.isArray(directory) ? directory : [directory];
 
   for (const dir of directories) {
-    const searchDir = path.resolve(dir, depDir);
-    const relativeToDir = findDependency(searchDir, depName);
-
+    const searchDirectory = path.resolve(dir, deependencyDir);
+    const relativeToDir = findDependency(searchDirectory, dependencyName);
     if (relativeToDir) {
       return relativeToDir;
     }
@@ -68,7 +65,7 @@ export default function lookup({ dependency, filename, directory, webpackConfig 
   // Old versions returned a static path, if one could not be found.
   // Do the same, if `directory` is not an array
   if (typeof directory === 'string') {
-    return path.resolve(directory, depDir, depName);
+    return path.resolve(directory, deependencyDir, dependencyName);
   }
 }
 
@@ -110,13 +107,13 @@ function loadWebpackConfig(webpackConfigPath) {
   return loadedConfig;
 }
 
-function findDependency(searchDir, depName) {
-  const nonPartialPath = path.resolve(searchDir, depName);
+function findDependency(searchDirectory, dependencyName) {
+  const nonPartialPath = path.resolve(searchDirectory, dependencyName);
   if (fs.existsSync(nonPartialPath)) {
     return nonPartialPath;
   }
 
-  const partialsPath = path.resolve(searchDir, `_${depName}`);
+  const partialsPath = path.resolve(searchDirectory, `_${dependencyName}`);
   if (fs.existsSync(partialsPath)) {
     return partialsPath;
   }
